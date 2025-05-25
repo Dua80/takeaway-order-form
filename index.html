@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Asian - Takeaway Order Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .form-section {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #ff6b6b;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .menu-section {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .menu-category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .menu-item input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .item-price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .total-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            border-radius: 10px;
+        }
+
+        .submit-section {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        #orderSummary {
+            display: none;
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            border: 2px solid #ddd;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .menu-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍜 The Asian Restaurant</h1>
+            <p>Authentic Asian Cuisine - Takeaway Orders</p>
+        </div>
+
+        <form id="orderForm">
+            <div class="form-section">
+                <h2 class="section-title">Customer Information</h2>
+                
+                <div class="form-group">
+                    <label for="customerName">Full Name *</label>
+                    <input type="text" id="customerName" name="customerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="pickupTime">Preferred Pickup Time</label>
+                    <select id="pickupTime" name="pickupTime">
+                        <option value="ASAP">As Soon As Possible</option>
+                        <option value="30 minutes">30 minutes</option>
+                        <option value="1 hour">1 hour</option>
+                        <option value="1.5 hours">1.5 hours</option>
+                        <option value="2 hours">2 hours</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <h2 class="section-title">Menu Selection</h2>
+
+                <div class="menu-category">
+                    <h3 class="category-title">🍛 Rice Dishes</h3>
+                    
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Chicken Fried Rice|8.50" id="item1">
+                        <div class="item-info">
+                            <div class="item-name">Chicken Fried Rice</div>
+                            <div class="item-description">Wok-fried rice with tender chicken, vegetables and egg</div>
+                        </div>
+                        <div class="item-price">£8.50</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Beef Fried Rice|9.00" id="item2">
+                        <div class="item-info">
+                            <div class="item-name">Beef Fried Rice</div>
+                            <div class="item-description">Savory beef strips with jasmine rice and Asian greens</div>
+                        </div>
+                        <div class="item-price">£9.00</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Vegetable Fried Rice|7.50" id="item3">
+                        <div class="item-info">
+                            <div class="item-name">Vegetable Fried Rice</div>
+                            <div class="item-description">Mixed seasonal vegetables with fragrant rice</div>
+                        </div>
+                        <div class="item-price">£7.50</div>
+                    </div>
+                </div>
+
+                <div class="menu-category">
+                    <h3 class="category-title">🍜 Noodle Dishes</h3>
+                    
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Pad Thai|10.50" id="item4">
+                        <div class="item-info">
+                            <div class="item-name">Pad Thai</div>
+                            <div class="item-description">Classic Thai stir-fried noodles with prawns and peanuts</div>
+                        </div>
+                        <div class="item-price">£10.50</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Chicken Chow Mein|9.50" id="item5">
+                        <div class="item-info">
+                            <div class="item-name">Chicken Chow Mein</div>
+                            <div class="item-description">Soft noodles with chicken and crisp vegetables</div>
+                        </div>
+                        <div class="item-price">£9.50</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Singapore Rice Noodles|11.00" id="item6">
+                        <div class="item-info">
+                            <div class="item-name">Singapore Rice Noodles</div>
+                            <div class="item-description">Curry-flavored rice noodles with shrimp and char siu</div>
+                        </div>
+                        <div class="item-price">£11.00</div>
+                    </div>
+                </div>
+
+                <div class="menu-category">
+                    <h3 class="category-title">🥘 Main Courses</h3>
+                    
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Sweet and Sour Pork|12.50" id="item7">
+                        <div class="item-info">
+                            <div class="item-name">Sweet and Sour Pork</div>
+                            <div class="item-description">Crispy pork with pineapple and bell peppers</div>
+                        </div>
+                        <div class="item-price">£12.50</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Kung Pao Chicken|11.50" id="item8">
+                        <div class="item-info">
+                            <div class="item-name">Kung Pao Chicken</div>
+                            <div class="item-description">Spicy Sichuan dish with chicken, peanuts and chilies</div>
+                        </div>
+                        <div class="item-price">£11.50</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Mapo Tofu|10.00" id="item9">
+                        <div class="item-info">
+                            <div class="item-name">Mapo Tofu</div>
+                            <div class="item-description">Silky tofu in spicy Sichuan sauce (Vegetarian)</div>
+                        </div>
+                        <div class="item-price">£10.00</div>
+                    </div>
+                </div>
+
+                <div class="menu-category">
+                    <h3 class="category-title">🥤 Beverages</h3>
+                    
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Thai Iced Tea|3.50" id="item10">
+                        <div class="item-info">
+                            <div class="item-name">Thai Iced Tea</div>
+                            <div class="item-description">Sweet and creamy traditional Thai tea</div>
+                        </div>
+                        <div class="item-price">£3.50</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Green Tea|2.50" id="item11">
+                        <div class="item-info">
+                            <div class="item-name">Hot Green Tea</div>
+                            <div class="item-description">Premium jasmine green tea</div>
+                        </div>
+                        <div class="item-price">£2.50</div>
+                    </div>
+
+                    <div class="menu-item">
+                        <input type="checkbox" name="items" value="Soft Drink|2.00" id="item12">
+                        <div class="item-info">
+                            <div class="item-name">Soft Drink</div>
+                            <div class="item-description">Coke, Sprite, or Orange Juice</div>
+                        </div>
+                        <div class="item-price">£2.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">Additional Information</h2>
+                
+                <div class="form-group">
+                    <label for="dietary">Dietary Requirements</label>
+                    <input type="text" id="dietary" name="dietary" placeholder="e.g., vegetarian, no nuts, gluten-free">
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="Any special requests or notes..."></textarea>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <div class="total-display" id="totalDisplay">
+                    Total: £0.00
+                </div>
+                <button type="submit" class="submit-btn">Generate Order Summary</button>
+                <p style="margin-top: 15px; color: #666;">
+                    Generate order summary first, then choose an option below.
+                </p>
+                <div id="orderSummary"></div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentOrderSummary = '';
+
+        function updateTotal() {
+            const checkboxes = document.querySelectorAll('input[name="items"]:checked');
+            let total = 0;
+
+            checkboxes.forEach(checkbox => {
+                const price = parseFloat(checkbox.value.split('|')[1]);
+                total += price;
+            });
+
+            document.getElementById('totalDisplay').textContent = `Total: £${total.toFixed(2)}`;
+        }
+
+        document.querySelectorAll('input[name="items"]').forEach(checkbox => {
+            checkbox.addEventListener('change', updateTotal);
+        });
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const customerName = formData.get('customerName');
+            const phone = formData.get('phone');
+            const email = formData.get('email') || 'Not provided';
+            const pickupTime = formData.get('pickupTime') || 'ASAP';
+            const dietary = formData.get('dietary') || 'None specified';
+            const notes = formData.get('notes') || 'None';
+
+            const selectedItems = [];
+            const checkboxes = document.querySelectorAll('input[name="items"]:checked');
+            let total = 0;
+
+            checkboxes.forEach(checkbox => {
+                const [item, price] = checkbox.value.split('|');
+                selectedItems.push(`${item} - £${price}`);
+                total += parseFloat(price);
+            });
+
+            if (selectedItems.length === 0) {
+                alert('Please select at least one item from the menu.');
+                return;
+            }
+
+            currentOrderSummary = `=== THE ASIAN RESTAURANT - TAKEAWAY ORDER ===
+
+Customer Information:
+Name: ${customerName}
+Phone: ${phone}
+Email: ${email}
+Pickup Time: ${pickupTime}
+
+Order Items:
+${selectedItems.join('\n')}
+
+TOTAL: £${total.toFixed(2)}
+
+Dietary Requirements: ${dietary}
+Additional Notes: ${notes}
+
+Order submitted on: ${new Date().toLocaleString()}
+
+Thank you for your order! We will contact you shortly to confirm details and arrange payment.`;
+
+            const orderSummaryDiv = document.getElementById('orderSummary');
+            if (orderSummaryDiv) {
+                orderSummaryDiv.textContent = currentOrderSummary;
+                orderSummaryDiv.style.display = 'block';
+                orderSummaryDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            const whatsappNumber = '60122510509';
+            const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(currentOrderSummary)}`;
+
+            // Remove existing buttons if any
+            const existingWhatsAppBtn = document.getElementById('whatsappBtn');
+            const existingDownloadBtn = document.getElementById('downloadBtn');
+            if (existingWhatsAppBtn) existingWhatsAppBtn.remove();
+            if (existingDownloadBtn) existingDownloadBtn.remove();
+
+            // Create WhatsApp button
+            const whatsappBtn = document.createElement('a');
+            whatsappBtn.href = whatsappLink;
+            whatsappBtn.target = '_blank';
+            whatsappBtn.id = 'whatsappBtn';
+            whatsappBtn.textContent = 'Send Order via WhatsApp';
+            whatsappBtn.style = `
+                display: inline-block;
+                background: linear-gradient(135deg, #25D366, #128C7E);
+                color: white;
+                padding: 15px 40px;
+                border-radius: 30px;
+                font-size: 1.2em;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                text-align: center;
+                margin: 10px;
+                text-decoration: none;
+            `;
+
+            // Create Download button
+            const downloadBtn = document.createElement('button');
+            downloadBtn.id = 'downloadBtn';
+            downloadBtn.textContent = 'Download Order as Text';
+            downloadBtn.style = `
+                display: inline-block;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 40px;
+                border: none;
+                border-radius: 30px;
+                font-size: 1.2em;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                text-align: center;
+                margin: 10px;
+                cursor: pointer;
+            `;
+
+            downloadBtn.addEventListener('click', function() {
+                if (!currentOrderSummary) {
+                    alert('Please generate an order summary first.');
+                    return;
+                }
+
+                const blob = new Blob([currentOrderSummary], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+
+                const now = new Date();
+                const timestamp = now.getFullYear() +
+                                  String(now.getMonth() + 1).padStart(2, '0') +
+                                  String(now.getDate()).padStart(2, '0') + '_' +
+                                  String(now.getHours()).padStart(2, '0') +
+                                  String(now.getMinutes()).padStart(2, '0');
+
+                a.href = url;
+                a.download = `Asian_Restaurant_Order_${timestamp}.txt`;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            });
+
+            const submitSection = document.querySelector('.submit-section');
+            submitSection.appendChild(whatsappBtn);
+            submitSection.appendChild(downloadBtn);
+        });
+    </script>
+</body>
+</html>
